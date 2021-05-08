@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { addToCart } from "../actions/cartActions";
+import MessageBox from "../components/MessageBox";
 
 export default function CartScreen(props) {
   const productId = props.match.params.id;
@@ -8,6 +10,8 @@ export default function CartScreen(props) {
     ? Number(props.location.search.split("=")[1])
     : 1;
 
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -16,12 +20,86 @@ export default function CartScreen(props) {
     }
   }, [dispatch, productId, qty]);
 
+  const removeFromCartHandler = (id) => {
+    console.log("remove from cart");
+  };
+
+  const checkoutHandler = () => {
+    props.history.push("/signin?redirect=shipping");
+  };
+
   return (
-    <div>
-      <h1>Ecran panier</h1>
-      <p>
-        AJOUTER AU PANIER : ID Produit: {productId} Quantité: {qty}
-      </p>
+    <div className="row top">
+      <div className="col-2">
+        <h1>Panier</h1>
+        {cartItems.length === 0 ? (
+          <MessageBox>
+            Votre panier est vide. <Link to="/">Aller faire ses courses.</Link>
+          </MessageBox>
+        ) : (
+          <ul>
+            {cartItems.map((item) => (
+              <li key={item.product}>
+                <div className="row">
+                  <div>
+                    <img src={item.image} alt={item.name} className="small" />
+                  </div>
+                  <div className="min-30">
+                    <Link to={`/product/${item.product}`}>{item.name}</Link>
+                  </div>
+                  <div>{item.price} €</div>
+                  <div>
+                    <select
+                      name={item.qty}
+                      onChange={(e) =>
+                        dispatch(
+                          addToCart(item.product, Number(e.target.value))
+                        )
+                      }
+                    >
+                      {[...Array(item.countInStock).keys()].map((x) => (
+                        <option key={x + 1} value={x + 1}>
+                          {x + 1}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => removeFromCartHandler(item.product)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="col-1">
+        <div className="card card-body">
+          <ul>
+            <li>
+              <h2>
+                Sous-total ( {cartItems.reduce((a, c) => a + c.qty, 0)} articles )
+                : {cartItems.reduce((a, c) => a + c.price * c.qty, 0)} €
+              </h2>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={checkoutHandler}
+                className="primary block"
+                disabled={cartItems.length === 0}
+              >
+                Passer au paiement
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
