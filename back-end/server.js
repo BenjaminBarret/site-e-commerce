@@ -7,13 +7,16 @@ import orderRouter from "./routers/orderRouter.js";
 
 dotenv.config();
 
+const cors = require("cors");
+
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(
-  process.env.MONGODB_URL || "mongodb://localhost/site-e-commerce",
+  process.env.MONGODB_URI || "mongodb://localhost/site-e-commerce",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -40,6 +43,16 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 5000;
+
+// Accessing the path module
+const path = require("path");
+
+// Step 1:
+app.use(express.static(path.resolve(__dirname, "./front-end/build")));
+// Step 2:
+app.get("*", function (request, response) {
+  response.sendFile(path.resolve(__dirname, "./front-end/build", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`Serve is running at http://localhost:${port}`);
