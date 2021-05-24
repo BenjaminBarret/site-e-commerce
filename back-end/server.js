@@ -5,7 +5,6 @@ import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 import orderRouter from "./routers/orderRouter.js";
 import cors from "cors";
-import path from "path";
 
 dotenv.config();
 
