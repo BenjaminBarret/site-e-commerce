@@ -46,7 +46,7 @@ function App() {
             {userInfo ? (
               <div className="dropdown">
                 <Link to="#">
-                  {userInfo.name} <i className="fa fa-caret_down"></i>
+                  {userInfo.name} <i className="fa fa-caret-down"></i>{" "}
                 </Link>
                 <ul className="dropdown-content">
                   <li>
@@ -65,6 +65,29 @@ function App() {
             ) : (
               <Link to="/signin">Se connecter</Link>
             )}
+            {userInfo && userInfo.isAdmin && (
+              <div className="dropdown">
+                <Link to="#admin">
+                  Admin <i className="fa fa-caret-down"></i>
+                </Link>
+                <ul className="dropdown-content">
+                  <li>
+                    <li>
+                      <Link to="/dashboard">Tableau de bord</Link>
+                    </li>
+                    <li>
+                      <Link to="/productlist">Produits</Link>
+                    </li>
+                    <li>
+                      <Link to="/orderlist">Commandes</Link>
+                    </li>
+                    <li>
+                      <Link to="/userlist">Utilisateurs</Link>
+                    </li>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         </header>
         <main>
@@ -76,8 +99,14 @@ function App() {
           <Route path="/payment" component={PaymentMethodScreen} />
           <Route path="/placeorder" component={PlaceOrderScreen}></Route>
           <Route path="/order/:id" component={OrderScreen}></Route>
-          <Route path="/orderhistory" component={OrderHistoryScreen}></Route>
-          <PrivateRoute path="/profile" component={ProfileScreen}></PrivateRoute>
+          <PrivateRoute
+            path="/orderhistory"
+            component={OrderHistoryScreen}
+          ></PrivateRoute>
+          <PrivateRoute
+            path="/profile"
+            component={ProfileScreen}
+          ></PrivateRoute>
           <Route path="/" component={HomeScreen} exact />
         </main>
         <footer className="row center">Tous droits réservés.</footer>
