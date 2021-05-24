@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "15.11.0"
+  },
   "scripts": {
     "server": "nodemon --watch back-end --exec node --experimental-modules back-end/server.js",
     "start-front": "cd front-end && npm start",
