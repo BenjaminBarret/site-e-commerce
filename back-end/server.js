@@ -4,10 +4,11 @@ import dotenv from "dotenv";
 import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 import orderRouter from "./routers/orderRouter.js";
+import cors from "cors";
+import path from "path";
 
 dotenv.config();
 
-const cors = require("cors");
 
 const app = express();
 app.use(cors());
@@ -44,15 +45,9 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 5000;
 
-// Accessing the path module
-const path = require("path");
-
-// Step 1:
-app.use(express.static(path.resolve(__dirname, "./front-end/build")));
-// Step 2:
-app.get("*", function (request, response) {
-  response.sendFile(path.resolve(__dirname, "./front-end/build", "index.html"));
-});
+if (process.env.NODE_ENV === 'production'){
+  app.use(express.static('front-end/build'));
+}
 
 app.listen(port, () => {
   console.log(`Serve is running at http://localhost:${port}`);
