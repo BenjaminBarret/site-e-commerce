@@ -4,16 +4,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "15.11.0"
-  },
   "scripts": {
     "server": "nodemon --watch back-end --exec node --experimental-modules back-end/server.js",
     "start-front": "cd front-end && npm start",
     "build": "cd front-end && npm run build",
     "install-client": "cd front-end && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
-    "start": "node back-end/server.js"
+    "start": "nodemon back-end/server.js"
   },
   "repository": {
     "type": "git",
@@ -34,7 +31,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.7",
     "path": "^0.12.7",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "nodemon": "^2.0.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
